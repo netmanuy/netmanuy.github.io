@@ -1,0 +1,14 @@
+prometheus.scrape "cloudflare" {
+  targets    = [{"__address__" = "localhost:8080"}]
+  forward_to = [prometheus.remote_write.grafana_cloud.receiver]
+}
+
+prometheus.remote_write "grafana_cloud" {
+  endpoint {
+    url = env("GRAFANA_CLOUD_URL")
+    basic_auth {
+      username = env("GRAFANA_CLOUD_USER_ID")
+      password = env("GRAFANA_CLOUD_API_KEY")
+    }
+  }
+}
